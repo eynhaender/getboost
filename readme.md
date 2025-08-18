@@ -1,4 +1,4 @@
-**Note:** After about 12 years of spending time on the project, I see no support for it, so I switched my focus to more promising ideas. _Sergey_
+**Note:** After more than 10 years of spending my time on the project, I see no support for it, so I switched my focus to more promising ideas. _Sergey_
 
 NuGet Packages for [Boost](http://boost.org).
 
