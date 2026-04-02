@@ -63,8 +63,8 @@ namespace builder
                         N("version", version.ToString()),
                         N("authors", Config.Authors),
                         N("owners", Config.Owners),
-                        N("licenseUrl", "https://github.com/sergey-shandar/getboost/blob/master/LICENSE"),
-                        N("projectUrl", "https://github.com/sergey-shandar/getboost"),
+                        N("licenseUrl", "https://github.com/eynhaender/getboost/blob/master/LICENSE"),
+                        N("projectUrl", "https://github.com/eynhaender/getboost"),
                         N("requireLicenseAcceptance", "false"),
                         N("description", description),
                         N("dependencies").Append(
@@ -91,6 +91,11 @@ namespace builder
                     UseShellExecute = false,
                 }).WaitForExit();
             var nupkgFile = id + "." + version + ".nupkg";
+            if (Config.LocalOnly)
+            {
+                Console.WriteLine("local only, skipping push: " + nupkgFile);
+                return;
+            }
             Console.WriteLine("uploading: " + nupkgFile);
             {
                 var p = Process.Start(

@@ -70,11 +70,11 @@ namespace builder
         public static Nuspec.Dependency Dependency(
             string library, string compiler)
             => DependencyOne(
-                $"boost_{library}-{compiler}",
+                $"{Config.PackagePrefix}boost_{library}-{compiler}",
                 CompilerVersion(Config.CompilerMap[compiler]));
 
         public static IEnumerable<Nuspec.Dependency> BoostDependency
-            => new[] { DependencyOne("boost", Config.Version) };
+            => new[] { DependencyOne(Config.PackagePrefix + "boost", Config.Version) };
 
         public Optional<string> Create(Optional<string> directory)
         {

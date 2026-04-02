@@ -159,6 +159,7 @@ namespace builder
 
         static void Main(string[] args)
         {
+            Config.LocalOnly = args.Length > 0 && args[0] == "--local";
             var doc = new Doc();
 
             // Changes
@@ -172,16 +173,17 @@ namespace builder
 
             // headers only library.
             {
+                var headerId = Config.PackagePrefix + "boost";
                 doc = doc
                     [T.H1("Headers Only Libraries")]
-                    [T.List[A("boost", Config.Version)]];
+                    [T.List[A(headerId, Config.Version)]];
                 var path = Path.Combine(Config.BoostDir, "boost");
                 var fileList =
                     new Dir(new DirectoryInfo(path), "boost").
                     FileList(f => true);
                 Nuspec.Create(
-                    "boost",
-                    "boost",
+                    headerId,
+                    headerId,
                     Config.Version,
                     "boost",
                     new[]
@@ -268,7 +270,7 @@ namespace builder
                 var list = T.List[T.Text("all libraries")];
                 foreach (var compiler in compilerDictionary.Keys.OrderBy(Config.CompilerNumber))
                 {
-                    var id = "boost-" + compiler;
+                    var id = Config.PackagePrefix + "boost-" + compiler;
                     var compilerLibraries = compilerDictionary[compiler];
                     CreateBinaryNuspec(
                         id,
@@ -306,7 +308,7 @@ namespace builder
             foreach (var library in libraryDictionary)
             {
                 var name = library.Key;
-                var libraryId = "boost_" + name;
+                var libraryId = Config.PackagePrefix + "boost_" + name;
                 var list = T.List[T.Text(name)];
                 foreach (var package in library
                     .Value

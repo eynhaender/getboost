@@ -5,18 +5,20 @@ namespace builder
 {
     public static class Config
     {
-        public static readonly Version Version = 
-            new StableVersion(1, 87, 0);
+        public static readonly Version Version =
+            new StableVersion(1, 90, 0);
 
         public static readonly List[] Release =
         {
         };
 
-        public const string Authors = "Sergey Shandar, Boost";
+        public const string PackagePrefix = "libbitcoin-";
 
-        public const string Owners = "sergey_shandar";
+        public const string Authors = "libbitcoin, Boost";
 
-        public const string BoostDir = @"..\..\..\..\..\..\boostorg\boost";
+        public const string Owners = "libbitcoin";
+
+        public const string BoostDir = @"..\..\..\..\..\boost";
 
         public sealed class CompilerInfo
         {
@@ -42,8 +44,10 @@ namespace builder
             { "vc140", new CompilerInfo("Visual Studio 2015 Update 3") },
             { "vc141", new CompilerInfo("Visual Studio 2017 15.9.67") },
             { "vc142", new CompilerInfo("Visual Studio 2019 16.11.41") },
-            { "vc143", new CompilerInfo("Visual Studio 2022 17.11.5") },
+            { "vc143", new CompilerInfo("Visual Studio 2022 17.14.29") },
         };
+
+        public static bool LocalOnly = false;
 
         public static int CompilerNumber(string key)
             => int.Parse(key.Substring(2));

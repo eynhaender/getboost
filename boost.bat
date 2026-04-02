@@ -5,13 +5,12 @@ call bootstrap.bat
 
 b2 headers
 
-rem add 'call :link XX.X' if you need to run for specific version of Visual C++ compiler.
+rem Supported toolsets: vc141 (VS2017), vc142 (VS2019), vc143 (VS2022)
+rem Add 'call :link XX.X' for additional compiler versions as needed.
 
-call :link 14.0
-call :link 12.0
-call :link 11.0
-call :link 10.0
-call :link 9.0
+call :link 14.3
+rem call :link 14.2
+rem call :link 14.1
 
 goto :eof
 
@@ -53,6 +52,5 @@ echo runtime-link=%3
 echo threading=%4
 echo address-model=%5
 echo }
-rem change this line if you need to specify additional options to compiler.
-b2 architecture=x86 link=%2 runtime-link=%3 threading=%4 address-model=%5 stage --stagedir=address-model-%5 --toolset=msvc-%1 --without-python
+b2 architecture=x86 link=%2 runtime-link=%3 threading=%4 address-model=%5 stage --stagedir=lib%5-msvc-%1 --toolset=msvc-%1 --without-python
 goto :eof

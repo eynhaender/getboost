@@ -1,21 +1,13 @@
-**Note:** After more than 10 years of spending my time on the project, I see no support for it, so I switched my focus to more promising ideas. You can still build the Boost NuGet packages yourself. _Sergey_
-
-NuGet Packages for [Boost](http://boost.org).
+NuGet Packages for [Boost](http://boost.org). Maintained by [libbitcoin](https://github.com/libbitcoin) as part of the Bitcoin Development Toolkit infrastructure.
 
 - [![NuGet package](https://img.shields.io/nuget/v/boost.svg?label=boost)](https://nuget.org/packages/boost)
 - [![NuGet package](https://img.shields.io/nuget/v/boost-vc143.svg?label=boost-vc143)](https://nuget.org/packages/boost-vc143)
 - [![NuGet package](https://img.shields.io/nuget/v/boost-vc142.svg?label=boost-vc142)](https://nuget.org/packages/boost-vc142)
 - [![NuGet package](https://img.shields.io/nuget/v/boost-vc141.svg?label=boost-vc141)](https://nuget.org/packages/boost-vc141)
-- [![NuGet package](https://img.shields.io/nuget/v/boost-vc140.svg?label=boost-vc140)](https://nuget.org/packages/boost-vc140)
-- [![NuGet package](https://img.shields.io/nuget/v/boost-vc120.svg?label=boost-vc120)](https://nuget.org/packages/boost-vc120)
-- [![NuGet package](https://img.shields.io/nuget/v/boost-vc110.svg?label=boost-vc110)](https://nuget.org/packages/boost-vc110)
-- [![NuGet package](https://img.shields.io/nuget/v/boost-vc100.svg?label=boost-vc100)](https://nuget.org/packages/boost-vc100)
-- [![NuGet package](https://img.shields.io/nuget/v/boost-vc90.svg?label=boost-vc90)](https://nuget.org/packages/boost-vc90)
-- [![NuGet package](https://img.shields.io/nuget/v/boost-vc80.svg?label=boost-vc80)](https://nuget.org/packages/boost-vc80)
-- [![NuGet package](https://img.shields.io/nuget/v/boost-src.svg?label=boost-src)](https://nuget.org/packages/boost-src)
 
 # Releases
 
+- [1.90](releases/1.90.md)
 - [1.87](releases/1.87.md)
 - [1.86](releases/1.86.md)
 - [1.85](releases/1.85.md)
