@@ -45,6 +45,7 @@ namespace builder
             { "vc141", new CompilerInfo("Visual Studio 2017 15.9.67") },
             { "vc142", new CompilerInfo("Visual Studio 2019 16.11.41") },
             { "vc143", new CompilerInfo("Visual Studio 2022 17.14.29") },
+            { "vc1450", new CompilerInfo("Visual Studio 2026 18.0") },
         };
 
         public static bool LocalOnly = false;

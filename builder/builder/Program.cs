@@ -100,7 +100,14 @@ namespace builder
         {
             foreach (var dir in new DirectoryInfo(Config.BoostDir).GetDirectories("lib*-msvc-*"))
             {
-                foreach (var file in dir.GetFiles("*boost*"))
+                // b2 stage puts files in <stagedir>/lib/; support both layouts.
+                var libSubDir = Path.Combine(dir.FullName, "lib");
+                var hasLibSubDir = Directory.Exists(libSubDir);
+                var scanDir = hasLibSubDir ? new DirectoryInfo(libSubDir) : dir;
+                var fileDir = hasLibSubDir
+                    ? Path.Combine(dir.Name, "lib")
+                    : dir.Name;
+                foreach (var file in scanDir.GetFiles("*boost*"))
                 {
                     var split = file.Name.SplitFirst('-');
                     var library = split.Before.SplitFirst('_').After;
@@ -110,7 +117,7 @@ namespace builder
                     var compiledLibrary = libraryDictionary.GetOrAddNew(library);
                     var compiledPackage =
                         compiledLibrary.PackageDictionary.GetOrAddNew(compiler);
-                    compiledPackage.AddFile(dir.Name, file.Name);
+                    compiledPackage.AddFile(fileDir, file.Name);
 
                     // add the compiler and add the library to the compiler.
                     compilerDictionary.GetOrAddNew(compiler)[library] =
