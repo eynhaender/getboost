@@ -5,12 +5,16 @@ call bootstrap.bat
 
 b2 headers
 
-rem Supported toolsets: vc141 (VS2017), vc142 (VS2019), vc143 (VS2022)
+rem Supported toolsets: vc141 (VS2017), vc142 (VS2019), vc143 (VS2022), vc145 (VS2026)
+rem Boost 1.91+ uses toolset version 14.5 (auto_link generates "vc145").
+rem Boost 1.90 used 14.50 (non-standard patch) -- kept below for reference.
 rem Add 'call :link XX.X' for additional compiler versions as needed.
 
-call :link 14.3
+call :link 14.5
+rem call :link 14.3
 rem call :link 14.2
 rem call :link 14.1
+rem call :link 14.50  (Boost 1.90 only, non-standard)
 
 goto :eof
 
@@ -52,5 +56,5 @@ echo runtime-link=%3
 echo threading=%4
 echo address-model=%5
 echo }
-b2 architecture=x86 link=%2 runtime-link=%3 threading=%4 address-model=%5 stage --stagedir=lib%5-msvc-%1 --toolset=msvc-%1 --without-python
+b2 architecture=x86 link=%2 runtime-link=%3 threading=%4 address-model=%5 stage --stagedir=lib%5-msvc-%1 --toolset=msvc-%1 --without-python --without-mpi
 goto :eof
