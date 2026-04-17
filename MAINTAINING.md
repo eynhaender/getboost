@@ -46,6 +46,15 @@ cd C:\Users\<you>\source\repos\boost
 bootstrap.bat
 ```
 
+If bootstrap fails with "Failed to build Boost.Build engine" (happens when `vswhere.exe`
+is not in PATH), build b2 manually from a VS Developer Command Prompt:
+
+```cmd
+cd tools\build\src\engine
+build.bat vc145
+copy b2.exe ..\..\..\..
+```
+
 Then add the VS2026 compiler to `project-config.jam` (created by bootstrap):
 
 ```jam

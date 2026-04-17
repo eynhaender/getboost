@@ -101,7 +101,7 @@ namespace builder
                 var p = Process.Start(
                   new ProcessStartInfo(
                       @"..\..\..\packages\NuGet.CommandLine.6.9.1\tools\nuget.exe",
-                      $"push {nupkgFile} -Source https://api.nuget.org/v3/index.json -ApiKey {ApiKey.Value}")
+                      $"push {nupkgFile} -Source https://api.nuget.org/v3/index.json -ApiKey {ApiKey.Value} -SkipDuplicate")
                   {
                       UseShellExecute = false,
                   });
