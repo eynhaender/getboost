@@ -5,6 +5,54 @@ what broke, why it broke, and what was changed to fix it.
 
 ---
 
+## 2026-05-01 — Boost 1.91.0 stable, vc145 (VS2026 official release)
+
+### Context
+
+Boost 1.91.0 was officially released on 2026-04-22. This entry covers the promotion from
+the pre-release `1.91.0-head` packages to the stable `1.91.0` packages.
+
+---
+
+### 1. Promoted version from `UnstableVersion` to `StableVersion`
+
+**Change:** `builder/builder/Config.cs` line 9:
+
+```csharp
+// Before
+new UnstableVersion(1, 91, 0, "head")
+
+// After
+new StableVersion(1, 91, 0)
+```
+
+**Effect:** All generated NuGet package IDs now use the version string `1.91.0` instead of
+`1.91.0-head`. The `-head` suffix is a NuGet pre-release marker; removing it makes the
+packages appear as stable releases in NuGet clients.
+
+---
+
+### 2. vc145 works out of the box — no `msvc.jam` patch needed
+
+**Context:** The `1.90`/`vc1450` build required a manual patch to `msvc.jam` because Boost
+1.90 did not yet recognise toolset `14.50`. Boost 1.91 ships with updated build tooling
+that recognises `msvc-14.5` natively.
+
+**Action:** No changes to `msvc.jam` or `project-config.jam` are required for the vc145
+build. The `boost.bat` script calls `b2 --toolset=msvc-14.5` directly and the toolset
+is detected automatically via vswhere / the installed VS2026 instance.
+
+---
+
+### 3. `readme.md` and `releases/1.91.md` updated
+
+- Badges updated from old `boost`/`boost-vcXXX` (sergey-shandar origin) to
+  `libbitcoin-boost`/`libbitcoin-boost-vc145`.
+- Compiler toolset history table added to readme.
+- New release notes file `releases/1.91.md` created.
+
+---
+
 ## 2026-04-17 — Boost 1.90, vc143 + vc1450 (VS2022 + VS2026)
 
 ### Context
