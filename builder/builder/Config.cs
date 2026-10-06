@@ -6,7 +6,8 @@ namespace builder
     public static class Config
     {
         public static readonly Version Version =
-            new StableVersion(1, 91, 0);
+            // 1.91.0.1: republish of 1.91.0 adding ARM64 binaries.
+            new StableVersion(1, 91, 0, 1);
 
         public static readonly List[] Release =
         {

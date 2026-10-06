@@ -64,7 +64,8 @@ namespace builder
                         stable.Major,
                         stable.Minor,
                         stable.MajorRevision,
-                        info.PreRelease),
+                        info.PreRelease,
+                        stable.PackageRevision),
                 unstable => unstable);
 
         public static Nuspec.Dependency Dependency(

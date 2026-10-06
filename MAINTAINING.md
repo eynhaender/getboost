@@ -98,7 +98,39 @@ files are staged into:
 ```
 repos\boost\lib32-msvc-14.5\lib\    (x86, vc145)
 repos\boost\lib64-msvc-14.5\lib\    (x64, vc145)
+repos\boost\libarm64-msvc-14.5\lib\ (ARM64, vc145)
 ```
+
+ARM64 needs the **MSVC Build Tools for ARM64/ARM64EC (Latest)** component
+(`Microsoft.VisualStudio.Component.VC.Tools.ARM64`, under Visual Studio Installer → Modify →
+Individual components; VS 2026 no longer labels it "v145"). Without it the ARM64 `b2` calls
+fail. "Latest" matches the default x86/x64 tools, so all architectures use the same compiler.
+Don't confuse it with "C++ ATL for ARM64", which contains no compiler.
+
+**Boost.Context patch (redo after every Boost download):** in
+`boost\libs\context\build\Jamfile.v2`, comment out the requirement line
+
+```jam
+      <target-os>windows,<architecture>arm,<address-model>64:<context-impl>winfib
+```
+
+It forces Windows ARM64 to the WinFiber backend, but the headers default to fcontext
+unless the consumer defines `BOOST_USE_WINFIB`. Without the patch `boost_context` lacks
+`jump_fcontext`/`make_fcontext`/`ontop_fcontext`, `coroutine` and `fiber` fail to link,
+and NuGet consumers would hit the same unresolved symbols. `boost.bat` passes `abi=aapcs`
+for ARM64 so b2 picks the `*_arm64_aapcs_pe_armasm.asm` sources (b2 defaults to `abi=ms`,
+which matches no ARM64 assembly).
+
+`boost.bat` also forces `boost.stacktrace.windbg=on boost.stacktrace.windbg_cached=on
+boost.stacktrace.basic=off` for ARM64. Stacktrace picks its backends by building and
+*running* small test programs, which an x64 host can't do for ARM64. Without these flags
+ARM64 silently loses `stacktrace_windbg`/`windbg_cached` and gains a `stacktrace_basic`
+package that no other architecture has. After a build, check that
+`libarm64-msvc-14.5\lib` matches `lib64-msvc-14.5\lib` once `-a64-` is swapped for `-x64-`.
+
+All three architectures share each package's `lib\native\` folder — Boost's
+library names carry the architecture (`-x32-`, `-x64-`, `-a64-`), so auto-linking picks
+the right file.
 
 Build time: 2–6 hours per compiler version. Only the toolsets with active `call :link`
 lines in `boost.bat` are built.

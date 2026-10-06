@@ -50,7 +50,8 @@ Published under the `libbitcoin-boost` package family on [NuGet](https://www.nug
 3. Run [boost.bat](boost.bat) from the `getboost` directory. This invokes `b2` for all
    enabled toolsets and may take several hours.
    - Currently enabled: **vc145** (Visual Studio 2026, MSVC 14.5)
-   - Compiled files land in `boost\lib32-msvc-14.5\lib\` and `boost\lib64-msvc-14.5\lib\`.
+   - Compiled files land in `boost\lib32-msvc-14.5\lib\`, `boost\lib64-msvc-14.5\lib\` and
+     `boost\libarm64-msvc-14.5\lib\` (x86, x64, ARM64).
 
 ## Building NuGet Packages
 

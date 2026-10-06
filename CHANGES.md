@@ -5,6 +5,65 @@ what broke, why it broke, and what was changed to fix it.
 
 ---
 
+## 2026-10-06 — ARM64 binaries, version 1.91.0.1
+
+### 1. `boost.bat` builds ARM64
+
+`:build` now takes the b2 `architecture` and stage-dir prefix as parameters, and
+`:address_model` adds `architecture=arm address-model=64` staged into
+`libarm64-msvc-<toolset>`. The builder already scans `lib*-msvc-*`, so no C# change was
+needed to pick these up. ARM64 file names (`...-mt-a64-1_91.lib`) don't clash with
+x86/x64, so they share `lib\native\` and auto-linking still works.
+
+### 2. Boost.Context on ARM64: winfib vs fcontext
+
+**Symptom:** ARM64 `boost_coroutine` and `boost_fiber` failed to link: unresolved
+`jump_fcontext`, `make_fcontext`, `ontop_fcontext`.
+
+**Cause:** `libs/context/build/Jamfile.v2` has the requirement
+`<target-os>windows,<architecture>arm,<address-model>64:<context-impl>winfib`, so
+`boost_context` was built with the WinFiber backend. The headers pick fcontext unless
+`BOOST_USE_WINFIB` is defined, and nothing sets that for dependents or NuGet consumers.
+A requirement can't be overridden from the b2 command line.
+
+**Fix:** commented that line out in the local Boost tree (redo for each new Boost download,
+see MAINTAINING.md), and `boost.bat` passes `abi=aapcs` for ARM64. b2 defaults to
+`abi=ms` on Windows, and the existing `*_arm64_aapcs_pe_armasm.asm` rule requires
+`<abi>aapcs`. Verified that the ARM64 `boost_context` DLL exports all three fcontext symbols.
+
+### 3. Boost.Stacktrace backends on ARM64
+
+**Symptom:** ARM64 had `boost_stacktrace_basic` but no `stacktrace_windbg` or
+`stacktrace_windbg_cached`, unlike x86/x64.
+
+**Cause:** `libs/stacktrace/build/Jamfile.v2` chooses its backends with `configure` run-checks
+(`has_windbg.cpp` etc.). When cross-compiling, the ARM64 test executables can't run on the
+x64 host, so every check fails and only the `basic` fallback is built. Compiling
+`has_windbg.cpp` for ARM64 by hand succeeds, so `dbgeng` is available on ARM64.
+
+**Fix:** `boost.bat` passes `boost.stacktrace.windbg=on boost.stacktrace.windbg_cached=on
+boost.stacktrace.basic=off` for ARM64, which skips the checks. The 1.91.0.1 binaries were
+fixed with a `--with-stacktrace` rebuild of the six ARM64 variants and the staged
+`*stacktrace_basic*-a64-*` files were deleted. ARM64 and x64 now stage identical file sets
+(443 files).
+
+### 4. `boost.bat` "is not recognized" from non-interactive shells
+
+The shell that ran the build had `NoDefaultCurrentDirectoryInExePath=1`, which stops cmd
+from finding `boost.bat`, `bootstrap.bat` and `b2.exe` in the current directory. Running
+`set NoDefaultCurrentDirectoryInExePath=` first fixes it; this is likely the real reason
+behind the "run from your own cmd window" advice.
+
+### 5. Fourth version part for republishing
+
+nuget.org versions are immutable, and `push -SkipDuplicate` would silently skip every
+repacked `1.91.0` package. `Version` now takes an optional `packageRevision`, giving
+`1.91.0.1`. All packages (header-only included) move together, because binary packages
+pin `libbitcoin-boost` with an exact `[version]` dependency. Drop the revision for the
+next Boost release.
+
+---
+
 ## 2026-05-01 — Boost 1.91.0 stable, vc145 (VS2026 official release)
 
 ### Context

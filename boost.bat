@@ -44,8 +44,15 @@ echo link=%2
 echo runtime-link=%3
 echo threading=%4
 echo }
-call :build %1 %2 %3 %4 32
-call :build %1 %2 %3 %4 64
+call :build %1 %2 %3 %4 x86 32 lib32
+call :build %1 %2 %3 %4 x86 64 lib64
+rem ARM64 requires the VS component "MSVC Build Tools for ARM64/ARM64EC (Latest)".
+rem abi=aapcs selects Boost.Context's armasm64 fcontext sources; this also needs the
+rem winfib override in boost\libs\context\build\Jamfile.v2 removed (see MAINTAINING.md).
+rem The stacktrace backends are forced because b2 can't run its ARM64 detection
+rem checks on an x64 host; this matches what x64 builds (windbg + windbg_cached).
+rem Quoted because cmd splits unquoted arguments at "=".
+call :build %1 %2 %3 %4 arm 64 libarm64 "abi=aapcs boost.stacktrace.windbg=on boost.stacktrace.windbg_cached=on boost.stacktrace.basic=off"
 goto :eof
 
 :build
@@ -54,7 +61,8 @@ echo toolset=%1
 echo link=%2
 echo runtime-link=%3
 echo threading=%4
-echo address-model=%5
+echo architecture=%5
+echo address-model=%6
 echo }
-b2 architecture=x86 link=%2 runtime-link=%3 threading=%4 address-model=%5 stage --stagedir=lib%5-msvc-%1 --toolset=msvc-%1 --without-python --without-mpi
+b2 architecture=%5 link=%2 runtime-link=%3 threading=%4 address-model=%6 %~8 stage --stagedir=%7-msvc-%1 --toolset=msvc-%1 --without-python --without-mpi
 goto :eof

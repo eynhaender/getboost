@@ -10,18 +10,24 @@ namespace builder
 
         public readonly int MajorRevision;
 
+        // NuGet-only 4th version part, for republishing the same Boost release.
+        public readonly int PackageRevision;
+
         public abstract T Switch<T>(
             Func<StableVersion, T> stable, Func<UnstableVersion, T> unstable);
 
-        protected Version(int major, int minor, int majorRevision)
+        protected Version(
+            int major, int minor, int majorRevision, int packageRevision)
         {
             Major = major;
             Minor = minor;
             MajorRevision = majorRevision;
+            PackageRevision = packageRevision;
         }
 
         public string BaseString
-            => Major + "." + Minor + "." + MajorRevision;
+            => Major + "." + Minor + "." + MajorRevision +
+                (PackageRevision > 0 ? "." + PackageRevision : "");
 
         public override string ToString()
             => BaseString;
@@ -32,8 +38,12 @@ namespace builder
         public readonly string MinorRevision;
 
         public UnstableVersion(
-            int major, int minor, int majorRevision, string minorRevision) : 
-            base(major, minor, majorRevision)
+            int major,
+            int minor,
+            int majorRevision,
+            string minorRevision,
+            int packageRevision = 0) :
+            base(major, minor, majorRevision, packageRevision)
         {
             MinorRevision = minorRevision;
         }
@@ -48,8 +58,8 @@ namespace builder
     public sealed class StableVersion : Version
     {
         public StableVersion(
-            int major, int minor, int majorRevision) :
-            base(major, minor, majorRevision)
+            int major, int minor, int majorRevision, int packageRevision = 0) :
+            base(major, minor, majorRevision, packageRevision)
         {
         }
 
